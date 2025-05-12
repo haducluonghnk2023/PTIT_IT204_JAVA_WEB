@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<% response.sendRedirect("/Session05/CategoriesController?action=findAll");%>
+<%--<% response.sendRedirect("/Session05/CategoriesController?action=findAll");%>--%>
 <html>
 <head>
     <title>Danh sách sản phẩm</title>
