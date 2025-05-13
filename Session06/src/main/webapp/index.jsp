@@ -9,7 +9,7 @@
 <a href="RegisterController">Ex02</a>
 <a href="product">Ex03</a>
 <a href="">Ex04</a>
-<a href="">Ex05</a>
+<a href="views/ex05/game.jsp">Ex05</a>
 
 </body>
 </html>
