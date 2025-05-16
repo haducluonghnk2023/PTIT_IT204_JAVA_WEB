@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping(value = "/", produces = "text/plain;charset=UTF-8")
 public class TicketController {
     @Autowired
     private TicketService ticketService;
@@ -31,7 +31,7 @@ public class TicketController {
     @Autowired
     private ScreenRoomService screenRoomService;
     @PostMapping("/book")
-    public ResponseEntity<?> bookTicket(@RequestBody TicketRequest request) {
+    public ResponseEntity<?> bookTicket(@ModelAttribute TicketRequest request) {
         // 1. Kiểm tra dữ liệu đầu vào
         if (request.getCustomerId() == null ||
                 request.getScheduleId() == null ||
@@ -59,6 +59,8 @@ public class TicketController {
         ScreenRoom screenRoom = screenRoomService.findById(schedule.getScreenRoomId());
         model.addAttribute("schedule", schedule);
         model.addAttribute("seatList", seatList);
+        System.out.println("ScreenRoomId: " + schedule.getScreenRoomId());
+        System.out.println("Danh sách ghế: " + seatList);
         model.addAttribute("screenRoom", screenRoom);
         model.addAttribute("customerId", 1L);
         return "ex04/booking";

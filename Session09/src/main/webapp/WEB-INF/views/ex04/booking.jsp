@@ -46,7 +46,6 @@
 
             var index = selectedSeats.indexOf(seatId);
             if (index > -1) {
-                // Bỏ chọn
                 selectedSeats.splice(index, 1);
                 element.classList.remove('selected');
             } else {
@@ -79,7 +78,7 @@
     <c:forEach var="seat" items="${seatList}">
         <div
                 class="seat ${seat.status == 'BOOKED' ? 'booked' : 'available'}"
-                onclick="toggleSeat(${seat.id}, this)"
+                onclick="toggleSeat('${seat.id}', this)"
                 title="Ghế số ${seat.seatNumber}, Giá: ${seat.price} VND">
                 ${seat.seatNumber}
         </div>

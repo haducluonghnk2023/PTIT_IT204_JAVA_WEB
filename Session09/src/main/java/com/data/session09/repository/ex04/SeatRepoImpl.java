@@ -33,7 +33,7 @@ public class SeatRepoImpl implements  SeatRepo {
                 while (rs.next()) {
                     Seat seat = new Seat();
                     seat.setId(rs.getLong("id"));
-                    seat.setScreenRoomId(rs.getLong("screenRoomId"));
+                    seat.setSeatNumber(rs.getString("seatNumber"));
                     seat.setPrice(rs.getDouble("price"));
                     seat.setStatus(rs.getString("status"));
                     seatList.add(seat);
@@ -45,6 +45,7 @@ public class SeatRepoImpl implements  SeatRepo {
            ConnectionDB.closeConnection(connection, callableStatement);
         }
 
+        System.out.println("Số ghế lấy được: " + seatList.size());
         return seatList;
     }
 }

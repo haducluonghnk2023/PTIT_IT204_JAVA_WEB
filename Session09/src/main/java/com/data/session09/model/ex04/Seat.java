@@ -14,4 +14,5 @@ public class Seat {
     private Long screenRoomId;
     private Double price = 50000.0;
     private String status;
+    private String seatNumber;
 }
