@@ -71,7 +71,7 @@
                 </ul>
             </td>
             <td>
-                <a href="${pageContext.request.contextPath}/updateProject?name=${project.name}" class="button">Sửa</a>
+                <a href="${pageContext.request.contextPath}/editProject?name=${project.name}" class="button">Sửa</a>
                 <form action="${pageContext.request.contextPath}/deleteProject" method="post" style="display:inline;">
                     <input type="hidden" name="projectName" value="${project.name}">
                     <button type="submit" class="button delete-btn" onclick="return confirm('Bạn có chắc muốn xóa dự án này?');">Xóa</button>

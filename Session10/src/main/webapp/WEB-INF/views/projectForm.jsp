@@ -14,7 +14,16 @@
 </head>
 <body>
 
-<h2>Tạo Dự Án Mới</h2>
+<h2>
+    <c:choose>
+        <c:when test="${not empty project.name}">
+            Cập nhật Dự Án
+        </c:when>
+        <c:otherwise>
+            Tạo Dự Án Mới
+        </c:otherwise>
+    </c:choose>
+</h2>
 
 <!-- Hiển thị thông báo nếu có -->
 <c:if test="${not empty message}">
@@ -25,7 +34,7 @@
 
 <!-- Form tạo dự án -->
 <form:form modelAttribute="project" method="post"
-           action="${pageContext.request.contextPath}/createProject"
+           action="${pageContext.request.contextPath}${actionUrl}"
            enctype="multipart/form-data">
 
     <div>
@@ -44,8 +53,16 @@
     </div>
 
     <div style="margin-top: 10px;">
-        <button type="submit">Tạo dự án</button>
+        <c:choose>
+            <c:when test="${not empty project.name}">
+                <button type="submit">Cập nhật dự án</button>
+            </c:when>
+            <c:otherwise>
+                <button type="submit">Tạo dự án</button>
+            </c:otherwise>
+        </c:choose>
     </div>
+
 </form:form>
 
 </body>

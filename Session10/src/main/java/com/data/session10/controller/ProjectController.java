@@ -36,6 +36,7 @@ public class ProjectController {
     @GetMapping("/createProject")
     public String showProjectForm(Model model) {
         model.addAttribute("project", new Project());
+        model.addAttribute("actionUrl", "/createProject");
         return "projectForm";
     }
 
@@ -66,6 +67,7 @@ public class ProjectController {
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("message", "Lỗi upload file.");
+            model.addAttribute("actionUrl", "/createProject");
             return "projectForm";
         }
 
@@ -81,6 +83,7 @@ public class ProjectController {
         for (Project p : projectList) {
             if (p.getName().equals(projectName)) {
                 model.addAttribute("project", p);
+                model.addAttribute("actionUrl", "/updateProject");
                 return "projectForm";
             }
         }
@@ -90,20 +93,29 @@ public class ProjectController {
 
     // Cập nhật lại dự án
     @PostMapping("/updateProject")
-    public String updateProject(@ModelAttribute("project") Project project,
+    public String updateProject(@ModelAttribute("project") Project updatedProject,
                                 @RequestParam("files") MultipartFile[] files,
                                 Model model) {
-        // Xóa dự án cũ
-        Iterator<Project> iterator = projectList.iterator();
-        while (iterator.hasNext()) {
-            if (iterator.next().getName().equals(project.getName())) {
-                iterator.remove();
+
+        Project existingProject = null;
+        for (Project p : projectList) {
+            if (p.getName().equals(updatedProject.getName())) {
+                existingProject = p;
                 break;
             }
         }
 
-        // Upload file như tạo mới
-        List<Document> documentList = new ArrayList<>();
+        if (existingProject == null) {
+            model.addAttribute("message", "Không tìm thấy dự án để cập nhật.");
+            model.addAttribute("actionUrl", "/updateProject");
+            return "projectForm";
+        }
+
+        // Cập nhật thông tin mô tả
+        existingProject.setDescription(updatedProject.getDescription());
+
+        // Xử lý upload file mới
+        List<Document> newDocuments = new ArrayList<>();
         String uploadsDir = servletContext.getRealPath("/projectDocs/");
         File dir = new File(uploadsDir);
         if (!dir.exists()) dir.mkdirs();
@@ -119,19 +131,23 @@ public class ProjectController {
 
                     Document doc = new Document();
                     doc.setFileName(fileName);
-                    documentList.add(doc);
+                    newDocuments.add(doc);
                 }
             }
+
+            // Gộp tài liệu cũ và mới
+            existingProject.getDocuments().addAll(newDocuments);
+
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("message", "Lỗi khi cập nhật file.");
+            model.addAttribute("actionUrl", "/updateProject");
             return "projectForm";
         }
 
-        project.setDocuments(documentList);
-        projectList.add(project); // Thêm lại
         return "redirect:/projects";
     }
+
 
     // Xóa dự án
     @PostMapping("/deleteProject")
