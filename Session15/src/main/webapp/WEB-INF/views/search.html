@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Tìm kiếm sản phẩm</title>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+<h2>Tìm kiếm sản phẩm</h2>
+
+<form th:action="@{/search}" method="post">
+    <input type="text" name="keyword" th:value="${keyword}" placeholder="Nhập tên hoặc mã sản phẩm"/>
+    <button type="submit">Tìm kiếm</button>
+</form>
+
+<!-- Hiển thị lỗi nếu có -->
+<p th:if="${error}" th:text="${error}" style="color:red;"></p>
+
+<!-- Hiển thị kết quả nếu có -->
+<table th:if="${result}" border="1" cellpadding="5" cellspacing="0">
+    <thead>
+    <tr>
+        <th>Mã sản phẩm</th>
+        <th>Tên sản phẩm</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="product : ${result}">
+        <td th:text="${product.code}"></td>
+        <td th:text="${product.name}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- Thông báo nếu không tìm thấy -->
+<p th:if="${result != null and #lists.isEmpty(result)}" style="color:gray;">
+    Không tìm thấy sản phẩm phù hợp.
+</p>
+
+</body>
+</html>

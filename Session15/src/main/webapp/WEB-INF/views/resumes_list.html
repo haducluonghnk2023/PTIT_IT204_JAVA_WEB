@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Danh sách CV</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+<h2>Danh sách CV</h2>
+
+<a th:href="@{/resumes/form}">Thêm CV mới</a>
+<br/><br/>
+
+<table border="1" cellpadding="8">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Họ tên</th>
+        <th>Email</th>
+        <th>SĐT</th>
+        <th>Học vấn</th>
+        <th>Kinh nghiệm</th>
+        <th>Kỹ năng</th>
+        <th>Hành động</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="cv : ${resumes}">
+        <td th:text="${cv.id}"></td>
+        <td th:text="${cv.fullName}"></td>
+        <td th:text="${cv.email}"></td>
+        <td th:text="${cv.phoneNumber}"></td>
+        <td th:text="${cv.education}"></td>
+        <td th:text="${cv.experience}"></td>
+        <td th:text="${cv.skills}"></td>
+        <td>
+            <a th:href="@{'/resumes/form?id=' + ${cv.id}}">Sửa</a> |
+            <a th:href="@{'/resumes/delete/' + ${cv.id}}"
+               onclick="return confirm('Bạn có chắc chắn muốn xóa CV này?');">
+                Xóa
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
