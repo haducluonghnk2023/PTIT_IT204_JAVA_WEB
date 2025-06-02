@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2 th:text="${busTrip.id == 0 ? 'Thêm chuyến xe' : 'Cập nhật chuyến xe'}"></h2>
+
+<form th:action="@{${formAction}}" method="post" enctype="multipart/form-data" th:object="${busTrip}">
+    <input type="hidden" th:field="*{id}"/>
+
+    <label>Điểm khởi hành:</label>
+    <input type="text" th:field="*{departurePoint}"/>
+    <p th:if="${#fields.hasErrors('departurePoint')}" th:errors="*{departurePoint}"></p>
+
+    <label>Điểm đến:</label>
+    <input type="text" th:field="*{destination}"/>
+    <p th:if="${#fields.hasErrors('destination')}" th:errors="*{destination}"></p>
+
+    <label>Thời gian khởi hành:</label>
+    <input type="datetime-local" th:field="*{departureTime}"/>
+    <p th:if="${#fields.hasErrors('departureTime')}" th:errors="*{departureTime}"></p>
+
+    <label>Thời gian đến:</label>
+    <input type="datetime-local" th:field="*{arrivalTime}"/>
+    <p th:if="${#fields.hasErrors('arrivalTime')}" th:errors="*{arrivalTime}"></p>
+
+    <label>Số ghế trống:</label>
+    <input type="number" th:field="*{seatsAvailable}"/>
+    <p th:if="${#fields.hasErrors('seatsAvailable')}" th:errors="*{seatsAvailable}"></p>
+
+    <label>Xe:</label>
+    <select th:field="*{busId}">
+        <option th:each="bus : ${busList}" th:value="${bus.id}" th:text="${bus.licensePlate}"></option>
+    </select>
+    <p th:if="${#fields.hasErrors('busId')}" th:errors="*{busId}"></p>
+
+    <label>Ảnh chuyến xe:</label>
+    <input type="file" th:field="*{imageFile}"/>
+    <p th:if="${#fields.hasErrors('imageFile')}" th:errors="*{imageFile}"></p>
+
+    <div th:if="${busTrip.image}">
+        <img th:src="${busTrip.image}" width="100" alt="Ảnh chuyến xe hiện tại"/>
+    </div>
+
+    <button type="submit">Lưu</button>
+</form>
+
+</body>
+</html>

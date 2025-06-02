@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Danh sách chuyến xe</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</head>
+<body class="bg-light">
+<div class="container py-4">
+    <h2 class="mb-4 text-center text-primary">Danh sách chuyến xe</h2>
+
+    <!-- Form tìm kiếm -->
+    <form class="row g-3 mb-4" th:action="@{/trips}" method="get">
+        <div class="col-md-5">
+            <input type="text" name="departure" class="form-control" placeholder="Điểm đi" th:value="${departure}">
+        </div>
+        <div class="col-md-5">
+            <input type="text" name="destination" class="form-control" placeholder="Điểm đến" th:value="${destination}">
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+        </div>
+    </form>
+
+    <!-- Bảng danh sách chuyến xe -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover table-striped bg-white">
+            <thead class="table-dark">
+            <tr>
+                <th scope="col">Mã chuyến</th>
+                <th scope="col">Nơi đi</th>
+                <th scope="col">Nơi đến</th>
+                <th scope="col">Giờ khởi hành</th>
+                <th scope="col">Giá vé (VNĐ)</th>
+                <th scope="col">Hành động</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="trip : ${listTrips}">
+                <td th:text="${trip.id}"></td>
+                <td th:text="${trip.departure}"></td>
+                <td th:text="${trip.destination}"></td>
+                <td th:text="${trip.departureTime}"></td>
+                <td th:text="${trip.price}"></td>
+                <td>
+                    <a th:if="${session.userId == null}"
+                       th:href="@{/login}"
+                       class="btn btn-sm btn-outline-primary">
+                        Đặt vé
+                    </a>
+
+                    <a th:if="${session.userId != null}"
+                       th:href="@{/ticket(tripId=${trip.id})}"
+                       class="btn btn-sm btn-primary">
+                        Đặt vé
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Phân trang -->
+    <nav th:if="${totalPages > 1}" class="mt-4">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
+                th:classappend="${i == currentPage} ? 'active'">
+                <a class="page-link"
+                   th:href="@{/trips(departure=${departure}, destination=${destination}, page=${i})}"
+                   th:text="${i}"></a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>
