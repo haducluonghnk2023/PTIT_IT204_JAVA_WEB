@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:replace="${title}">My Website</title>
+</head>
+<body>
+
+<!-- Header Fragment -->
+<div th:fragment="header">
+    <header>
+        <h1>My Website</h1>
+        <nav>
+            <a th:href="@{/}">Home</a> |
+            <a th:href="@{/about}">About</a> |
+            <a th:href="@{/contact}">Contact</a>
+        </nav>
+        <hr>
+    </header>
+</div>
+
+<!-- Footer Fragment -->
+<div th:fragment="footer">
+    <footer>
+        <hr>
+        <p>© 2025 My Website. All rights reserved.</p>
+    </footer>
+</div>
+
+</body>
+</html>

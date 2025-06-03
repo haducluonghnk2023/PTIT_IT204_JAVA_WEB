@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Đặt vé xe</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</head>
+<body class="bg-light">
+<div class="container py-4">
+    <h2 class="mb-4 text-center text-primary">Đặt vé cho chuyến xe</h2>
+
+    <div class="card p-4 bg-white shadow-sm">
+        <form th:action="@{/tickets/book}" method="post">
+
+            <input type="hidden" name="tripId" th:value="${trip.id}">
+
+            <div class="mb-3">
+                <label class="form-label">Chuyến xe</label>
+                <input type="text" class="form-control" th:value="${trip.departurePoint} + ' → ' + ${trip.destination}" readonly>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Ngày khởi hành</label>
+                <input type="date" name="departureDate" class="form-control" th:value="${trip.getDepartureTime()}" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Danh sách ghế (vd: A1,A2,A3)</label>
+                <input type="text" name="seatList" class="form-control" placeholder="Nhập danh sách ghế cách nhau bởi dấu phẩy" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Tổng tiền (VNĐ)</label>
+                <input type="number" name="totalMoney" class="form-control" min="0" step="1000" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Đặt vé</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

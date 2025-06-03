@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thanh toán</title>
+    <style>
+        form {
+            width: 50%;
+            margin: auto;
+        }
+        label {
+            display: block;
+            margin: 8px 0 4px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h2 style="text-align:center;">Thông tin thanh toán</h2>
+
+<form th:action="@{/order/checkout}" method="post" th:object="${order}">
+    <label>Họ tên người nhận:</label>
+    <input type="text" th:field="*{recipientName}" required/>
+
+    <label>Số điện thoại:</label>
+    <input type="text" th:field="*{phoneNumber}" required/>
+
+    <label>Địa chỉ giao hàng:</label>
+    <textarea th:field="*{address}" required></textarea>
+
+    <label>Tổng tiền:</label>
+    <input type="text" th:value="${T(java.lang.Math).round(total)}" readonly/>
+
+    <button type="submit">Xác nhận thanh toán</button>
+</form>
+
+</body>
+</html>

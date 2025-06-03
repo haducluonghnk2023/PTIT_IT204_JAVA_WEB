@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thêm / Sửa CV</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<form th:action="@{/resumes/save}" th:object="${resume}" method="post">
+    <h2 th:text="${#fields.hasErrors('*') ? 'Sửa CV' : 'Thêm CV'}"></h2>
+    <input type="hidden" th:field="*{id}" />
+    <br>
+    <label>Họ và tên:</label>
+    <input type="text" th:field="*{fullName}" required />
+    <div th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></div>
+    <br>
+    <label>Email:</label>
+    <input type="email" th:field="*{email}" required />
+    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+    <br>
+    <label>Số điện thoại:</label>
+    <input type="text" th:field="*{phoneNumber}" required pattern="^(0[0-9]{9,10})$" />
+    <div th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
+    <br>
+    <label>Trình độ học vấn:</label>
+    <textarea th:field="*{education}"></textarea>
+    <br>
+    <label>Kinh nghiệm làm việc:</label>
+    <textarea th:field="*{experience}"></textarea>
+    <br>
+    <label>Kỹ năng:</label>
+    <textarea th:field="*{skills}"></textarea>
+    <br>
+    <button type="submit">Lưu</button>
+</form>
+</body>
+</html>

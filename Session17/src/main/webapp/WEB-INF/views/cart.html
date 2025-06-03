@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Giỏ hàng</title>
+    <style>
+        table {
+            width: 80%;
+            margin: auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ccc;
+            text-align: center;
+        }
+        form {
+            display: inline;
+        }
+    </style>
+</head>
+<body>
+<h2 style="text-align: center;">Giỏ hàng</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>Tên sản phẩm</th>
+        <th>Giá</th>
+        <th>Số lượng</th>
+        <th>Tổng</th>
+        <th>Hành động</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${cartItems}">
+        <td th:text="${productService.findById(item.productId).productName}"></td>
+        <td th:text="${T(java.lang.Math).round(productService.findById(item.productId).price)}"></td>
+        <td>
+            <form th:action="@{/cart/update}" method="post">
+                <input type="hidden" name="cartId" th:value="${item.id}"/>
+                <input type="number" name="quantity" th:value="${item.quantity}" min="1"/>
+                <button type="submit">Cập nhật</button>
+            </form>
+        </td>
+        <td th:text="${productService.findById(item.productId).price * item.quantity}"></td>
+        <td>
+            <form th:action="@{/cart/remove}" method="post">
+                <input type="hidden" name="cartId" th:value="${item.id}"/>
+                <button type="submit">Xóa</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<h3 style="text-align: center; margin-top: 30px;">Tổng cộng:
+    <span th:text="${T(java.lang.Math).round(total)}"></span>
+</h3>
+
+<div style="text-align:center; margin-top: 20px;">
+    <a href="/order/checkout">
+        <button>Thanh toán</button>
+    </a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách sản phẩm</title>
+</head>
+<body>
+<h2>Danh sách sản phẩm</h2>
+<table border="1" cellpadding="5">
+    <thead>
+    <tr>
+        <th>Tên sản phẩm</th>
+        <th>Mô tả</th>
+        <th>Hành động</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="product : ${products}">
+        <td th:text="${product.name}"></td>
+        <td th:text="${product.description}"></td>
+        <td><a th:href="@{'/products/' + ${product.id}}">Xem chi tiết</a></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

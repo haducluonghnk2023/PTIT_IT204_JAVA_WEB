@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách chuyến xe</title>
+</head>
+<body>
+<h2>Danh sách chuyến xe</h2>
+
+<a href="/admin/bustrip/new">Thêm chuyến xe</a>
+
+<table border="1" cellpadding="10" cellspacing="0">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Điểm đi</th>
+        <th>Điểm đến</th>
+        <th>Thời gian đi</th>
+        <th>Thời gian đến</th>
+        <th>Số ghế</th>
+        <th>Xe</th>
+        <th>Ảnh</th>
+        <th>Hành động</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="trip : ${tripList}">
+        <td th:text="${trip.id}"></td>
+        <td th:text="${trip.departurePoint}"></td>
+        <td th:text="${trip.destination}"></td>
+        <td th:text="${trip.departureTime}"></td> -
+        <td th:text="${trip.arrivalTime}"></td>
+        <td th:text="${trip.seatsAvailable}"></td>
+        <td th:text="${trip.busId}"></td>
+        <td>
+            <img th:src="@{${trip.image}}" width="80" alt="Bus image"/>
+        </td>
+        <td>
+            <a th:href="@{'/admin/bustrip/edit/' + ${trip.id}}">Sửa</a> |
+            <a th:href="@{'/admin/bustrip/delete/' + ${trip.id}}"
+               onclick="return confirm('Bạn có chắc muốn xoá chuyến xe này?')">Xoá</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
