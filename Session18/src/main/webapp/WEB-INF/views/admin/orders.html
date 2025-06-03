@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{adminLayout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý đơn hàng</title>
+    <th:block layout:fragment="header-scripts"></th:block>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1>Quản lý đơn hàng</h1>
+    <table border="1" cellpadding="10" cellspacing="0">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Người dùng</th>
+            <th>Tổng tiền</th>
+            <th>Ngày đặt</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${orders}">
+            <td th:text="${order.id}">1</td>
+            <td th:text="${order.user.username}">Tên người dùng đặt hàng</td>
+            <td th:text="${order.totalPrice}">150000</td>
+            <td th:text="${order.orderDate}">2023-01-01</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<a href="/admin">Quay lại</a>
+<th:block layout:fragment="footer-scripts"></th:block>
+</body>
+</html>

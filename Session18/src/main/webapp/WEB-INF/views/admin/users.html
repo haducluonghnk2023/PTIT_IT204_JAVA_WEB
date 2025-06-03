@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/adminLayout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý người dùng</title>
+    <style>
+        /* Style cho phân trang */
+        .current-page {
+            font-weight: bold;
+            color: red;
+            text-decoration: underline;
+        }
+    </style>
+    <th:block layout:fragment="header-scripts"></th:block>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1>Quản lý người dùng</h1>
+
+    <!-- Form tìm kiếm -->
+    <form th:action="@{/admin/users}" method="get">
+        <input type="text" name="keyword" placeholder="Tìm kiếm email hoặc tên"
+               th:value="${filterKeyword}" />
+        <button type="submit">Tìm kiếm</button>
+    </form>
+
+    <table border="1" cellpadding="10" cellspacing="0" style="margin-top: 15px;">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Vai trò</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}">1</td>
+            <td th:text="${user.email}">a@gmail.com</td>
+            <td th:text="${user.role}">ADMIN</td>
+            <td>
+                <span th:text="${user.locked} ? 'Đã khóa' : 'Hoạt động'"></span>
+            </td>
+            <td>
+                <form th:if="${!user.locked}" th:action="@{'/admin/users/lock/' + ${user.id}}" method="post" style="display:inline;">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <input type="hidden" name="keyword" th:value="${filterKeyword}" />
+                    <input type="hidden" name="page" th:value="${currentPage}" />
+                    <button type="submit" onclick="return confirm('Bạn có chắc muốn khóa người dùng này?')">Khóa</button>
+                </form>
+                <form th:if="${user.locked}" th:action="@{'/admin/users/unlock/' + ${user.id}}" method="post" style="display:inline;">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <input type="hidden" name="keyword" th:value="${filterKeyword}" />
+                    <input type="hidden" name="page" th:value="${currentPage}" />
+                    <button type="submit" onclick="return confirm('Bạn có chắc muốn mở khóa người dùng này?')">Mở khóa</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Phân trang -->
+    <div style="margin-top: 20px;">
+        <span>Trang: </span>
+        <span th:each="i : ${#numbers.sequence(1, totalPages)}">
+            <a th:href="@{/admin/users(page=${i}, size=${pageSize}, keyword=${filterKeyword})}"
+               th:text="${i}"
+               th:classappend="${i == currentPage} ? 'current-page' : ''"
+               style="margin: 0 5px; text-decoration:none;"></a>
+        </span>
+    </div>
+
+</div>
+<a href="/admin">Quay lại</a>
+<th:block layout:fragment="footer-scripts"></th:block>
+</body>
+</html>

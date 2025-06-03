@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/adminLayout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý sản phẩm</title>
+    <th:block layout:fragment="header-scripts"></th:block>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1>Quản lý sản phẩm</h1>
+    <form method="get" th:action="@{/admin/products}">
+        <input type="text" name="name" placeholder="Tìm theo tên sản phẩm"
+               th:value="${filterName}" />
+        <button type="submit">Lọc</button>
+    </form>
+    <table border="1" cellpadding="10" cellspacing="0">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên sản phẩm</th>
+            <th>Giá</th>
+            <th>Mô tả</th>
+            <th>Hành động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="product : ${products}">
+            <td th:text="${product.id}">1</td>
+            <td th:text="${product.name}">Sản phẩm A</td>
+            <td th:text="${product.price}">100000</td>
+            <td th:text="${product.description}">Mô tả sản phẩm A</td>
+            <td>
+                <a th:href="@{'/admin/products/edit/' + ${product.id}}">Sửa</a> |
+                <a th:href="@{'/admin/products/delete/' + ${product.id}}"
+                   onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?')">Xóa</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div>
+    <nav>
+        <ul style="list-style: none; display: flex; gap: 10px; padding: 0;">
+            <li th:if="${currentPage > 1}">
+                <a th:href="@{/admin/products(page=${currentPage - 1}, size=${pageSize}, name=${filterName})}">« Trước</a>
+            </li>
+            <li th:each="i : ${#numbers.sequence(1, totalPages)}"
+                th:classappend="${i == currentPage} ? 'active'">
+                <a th:href="@{/admin/products(page=${i}, size=${pageSize}, name=${filterName})}"
+                   th:text="${i}">1</a>
+            </li>
+            <li th:if="${currentPage < totalPages}">
+                <a th:href="@{/admin/products(page=${currentPage + 1}, size=${pageSize}, name=${filterName})}">Sau »</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+<a href="/admin">Quay lại</a>
+<th:block layout:fragment="footer-scripts"></th:block>
+</body>
+</html>
