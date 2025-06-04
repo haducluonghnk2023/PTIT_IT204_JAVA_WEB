@@ -5,10 +5,9 @@ import com.data.practice19.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/accounts")
@@ -17,10 +16,18 @@ public class AccountController {
     private AccountService accountService;
 
     @GetMapping
-    public String listAccounts(Model model) {
-        model.addAttribute("accounts", accountService.findAll());
+    public String listAccounts(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
+        List<Account> accounts;
+        if (keyword != null && !keyword.isEmpty()) {
+            accounts = accountService.findByNameContaining(keyword);
+            model.addAttribute("keyword", keyword);
+        } else {
+            accounts = accountService.findAll();
+        }
+        model.addAttribute("accounts", accounts);
         return "accounts_list";
     }
+
 
     @GetMapping("/add")
     public String addAccount(Model model) {

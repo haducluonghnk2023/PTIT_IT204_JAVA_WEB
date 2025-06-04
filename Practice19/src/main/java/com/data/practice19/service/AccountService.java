@@ -10,4 +10,5 @@ public interface AccountService {
     Account findById(int id);
     void deleteById(int id);
     void update(Account account);
+    List<Account> findByNameContaining(String keyword);
 }

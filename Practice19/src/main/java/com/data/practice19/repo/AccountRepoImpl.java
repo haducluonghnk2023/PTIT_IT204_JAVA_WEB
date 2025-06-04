@@ -68,4 +68,16 @@ public class AccountRepoImpl implements  AccountRepo {
         session.getTransaction().commit();
         session.close();
     }
+
+    @Override
+    public List<Account> findByNameContaining(String keyword) {
+        Session session = sessionFactory.openSession();
+        List<Account> accounts = session.createQuery(
+                        "FROM Account WHERE CONCAT(firstName, ' ', lastName) LIKE :keyword", Account.class)
+                .setParameter("keyword", "%" + keyword + "%")
+                .list();
+        session.close();
+        return accounts;
+    }
+
 }

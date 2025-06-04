@@ -8,6 +8,11 @@
 <a th:href="@{/accounts/add}">
     <button type="button">Thêm tài khoản</button>
 </a>
+<form th:action="@{/accounts}" method="get">
+    <input type="text" name="keyword" placeholder="Tìm kiếm theo tên" th:value="${keyword}">
+    <button type="submit">Tìm kiếm</button>
+</form>
+
     <table border="1">
         <thead>
             <tr>

@@ -35,4 +35,9 @@ public class AccountServiceImpl implements  AccountService {
     public void update(Account account) {
         accountRepo.update(account);
     }
+
+    @Override
+    public List<Account> findByNameContaining(String keyword) {
+        return accountRepo.findByNameContaining(keyword);
+    }
 }
