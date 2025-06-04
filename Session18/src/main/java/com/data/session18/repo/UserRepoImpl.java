@@ -32,6 +32,16 @@ public class UserRepoImpl implements  UserRepo {
     }
 
     @Override
+    public List<User> findAll() {
+        Session session = sessionFactory.openSession();
+        try {
+            return session.createQuery("FROM User", User.class).list();
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
     public int countUsers() {
         Session session = sessionFactory.openSession();
         Long count = (Long) session.createQuery("select count(u) from User u").uniqueResult();

@@ -1,5 +1,6 @@
 package com.data.session18.controller;
 
+import com.data.session18.entity.Order;
 import com.data.session18.entity.Product;
 import com.data.session18.entity.User;
 import com.data.session18.service.OrderService;
@@ -122,6 +123,46 @@ public class AdminController {
     public String manageOrders(Model model) {
         model.addAttribute("orders", orderService.findAll());
         return "admin/orders";
+    }
+
+    @GetMapping("/orders/add")
+    public String showAddOrderForm(Model model) {
+        model.addAttribute("order", new Order());
+        model.addAttribute("users", userService.findAll());
+        return "admin/formOrder";
+    }
+
+    // Xử lý thêm đơn hàng
+    @PostMapping("/orders/add")
+    public String addOrder(@ModelAttribute Order order) {
+        orderService.save(order);
+        return "redirect:/admin/orders";
+    }
+
+    // Hiển thị form sửa đơn hàng
+    @GetMapping("/orders/edit/{id}")
+    public String showEditOrderForm(@PathVariable("id") Long id, Model model) {
+        Order order = orderService.findById(id);
+        if (order == null) {
+            return "redirect:/admin/orders";
+        }
+        model.addAttribute("order", order);
+        model.addAttribute("users", userService.findAll());
+        return "admin/formOrder";
+    }
+
+    // Xử lý cập nhật đơn hàng
+    @PostMapping("/orders/edit")
+    public String updateOrder(@ModelAttribute Order order) {
+        orderService.save(order);
+        return "redirect:/admin/orders";
+    }
+
+    // Xóa đơn hàng
+    @GetMapping("/orders/delete/{id}")
+    public String deleteOrder(@PathVariable("id") Long id) {
+        orderService.deleteById(id);
+        return "redirect:/admin/orders";
     }
 
     // Sửa sản phẩm

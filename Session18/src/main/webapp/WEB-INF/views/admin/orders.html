@@ -10,6 +10,9 @@
 <body>
 <div layout:fragment="content">
     <h1>Quản lý đơn hàng</h1>
+    <a href="/admin/orders/add">
+        <button>Thêm đơn hàng</button>
+    </a>
     <table border="1" cellpadding="10" cellspacing="0">
         <thead>
         <tr>
@@ -17,17 +20,26 @@
             <th>Người dùng</th>
             <th>Tổng tiền</th>
             <th>Ngày đặt</th>
+            <th>Hành động</th> <!-- Thêm cột này -->
         </tr>
         </thead>
         <tbody>
         <tr th:each="order : ${orders}">
             <td th:text="${order.id}">1</td>
-            <td th:text="${order.user.username}">Tên người dùng đặt hàng</td>
+            <td th:text="${order.user.username}">Tên người dùng</td>
             <td th:text="${order.totalPrice}">150000</td>
             <td th:text="${order.orderDate}">2023-01-01</td>
+            <td>
+                <a th:href="@{/admin/orders/edit/{id}(id=${order.id})}">Sửa</a>
+                |
+                <form th:action="@{/admin/orders/delete/{id}(id=${order.id})}" method="post" style="display:inline;">
+                    <button type="submit" onclick="return confirm('Bạn có chắc muốn xóa đơn hàng này?')">Xóa</button>
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>
+
 </div>
 <th:block layout:fragment="footer-scripts"></th:block>
 </body>

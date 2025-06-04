@@ -30,4 +30,19 @@ public class OrderServiceImpl implements  OrderService {
     public double getRevenueByYear() {
         return orderRepo.getRevenueByYear();
     }
+
+    @Override
+    public void save(Order order) {
+        orderRepo.save(order);
+    }
+
+    @Override
+    public Order findById(Long id) {
+        return orderRepo.findById(id);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        orderRepo.deleteById(id);
+    }
 }

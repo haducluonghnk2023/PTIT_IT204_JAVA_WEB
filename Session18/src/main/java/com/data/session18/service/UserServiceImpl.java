@@ -17,6 +17,11 @@ public class UserServiceImpl implements  UserService {
     }
 
     @Override
+    public List<User> findAll() {
+        return userRepo.findAll();
+    }
+
+    @Override
     public int countUsers() {
         return userRepo.countUsers();
     }

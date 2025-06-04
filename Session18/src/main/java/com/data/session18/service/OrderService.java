@@ -9,4 +9,7 @@ public interface OrderService {
     int countOrders();
     double getRevenueByMonth();
     double getRevenueByYear();
+    void save(Order order);
+    Order findById(Long id);
+    void deleteById(Long id);
 }

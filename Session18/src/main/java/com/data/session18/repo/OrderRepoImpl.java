@@ -48,4 +48,37 @@ public class OrderRepoImpl implements  OrderRepo {
         session.close();
         return revenue != null ? revenue : 0.0;
     }
+
+    @Override
+    public void save(Order order) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        if (order.getId() == null) {
+            session.save(order);
+        } else {
+            session.update(order);
+        }
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    @Override
+    public Order findById(Long id) {
+        Session session = sessionFactory.openSession();
+        Order order = session.get(Order.class, id);
+        session.close();
+        return order;
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Order order = session.get(Order.class, id);
+        if (order != null) {
+            session.delete(order);
+        }
+        session.getTransaction().commit();
+        session.close();
+    }
 }
