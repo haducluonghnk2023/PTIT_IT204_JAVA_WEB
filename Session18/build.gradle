@@ -38,6 +38,9 @@ dependencies {
     implementation("mysql:mysql-connector-java:8.0.30")
     // thymeleaf spring
     implementation("org.thymeleaf:thymeleaf-spring5:3.0.12.RELEASE")
+    // thymeleaf layout dialect
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.0.0'
+
 }
 
 test {

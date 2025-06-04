@@ -8,8 +8,11 @@ import com.data.session18.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Controller
@@ -24,6 +27,7 @@ public class AdminController {
     @Autowired
     private OrderService orderService;
 
+    // Trang dashboard chính
     @GetMapping
     public String adminDashboard(Model model) {
         model.addAttribute("userCount", userService.countUsers());
@@ -32,20 +36,21 @@ public class AdminController {
         model.addAttribute("monthlyRevenue", orderService.getRevenueByMonth());
         model.addAttribute("yearlyRevenue", orderService.getRevenueByYear());
 
-        return "layout/adminLayout";
+        return "admin/dashboard"; // 👉 KHÔNG TRẢ VỀ layout trực tiếp
     }
 
+    // Quản lý sản phẩm
     @GetMapping("/products")
     public String manageProducts(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "5") int size,
-            @RequestParam(required = false) String name,  // tham số lọc tên sản phẩm
+            @RequestParam(required = false) String name,
             Model model) {
 
         List<Product> products;
         long totalProducts;
 
-        if (name != null && !name.isEmpty()) {
+        if (StringUtils.hasText(name)) {
             products = productService.findByNameContaining(name, page, size);
             totalProducts = productService.countByNameContaining(name);
         } else {
@@ -64,7 +69,7 @@ public class AdminController {
         return "admin/products";
     }
 
-
+    // Quản lý người dùng
     @GetMapping("/users")
     public String manageUsers(
             @RequestParam(defaultValue = "1") int page,
@@ -75,7 +80,7 @@ public class AdminController {
         List<User> users;
         long totalUsers;
 
-        if (keyword != null && !keyword.isEmpty()) {
+        if (StringUtils.hasText(keyword)) {
             users = userService.findUsers(keyword, page, size);
             totalUsers = userService.countUsers(keyword);
         } else {
@@ -94,13 +99,13 @@ public class AdminController {
         return "admin/users";
     }
 
-
     @PostMapping("/users/lock/{id}")
     public String lockUser(@PathVariable("id") Long id,
                            @RequestParam(required = false) String keyword,
                            @RequestParam(defaultValue = "1") int page) {
         userService.lockUser(id);
-        return "redirect:/admin/users?page=" + page + (keyword != null ? "&keyword=" + keyword : "");
+        String encoded = keyword != null ? "&keyword=" + UriUtils.encode(keyword, StandardCharsets.UTF_8) : "";
+        return "redirect:/admin/users?page=" + page + encoded;
     }
 
     @PostMapping("/users/unlock/{id}")
@@ -108,16 +113,18 @@ public class AdminController {
                              @RequestParam(required = false) String keyword,
                              @RequestParam(defaultValue = "1") int page) {
         userService.unlockUser(id);
-        return "redirect:/admin/users?page=" + page + (keyword != null ? "&keyword=" + keyword : "");
+        String encoded = keyword != null ? "&keyword=" + UriUtils.encode(keyword, StandardCharsets.UTF_8) : "";
+        return "redirect:/admin/users?page=" + page + encoded;
     }
 
-
+    // Quản lý đơn hàng
     @GetMapping("/orders")
     public String manageOrders(Model model) {
         model.addAttribute("orders", orderService.findAll());
         return "admin/orders";
     }
 
+    // Sửa sản phẩm
     @GetMapping("/products/edit/{id}")
     public String showEditProductForm(@PathVariable("id") Long id, Model model) {
         Product product = productService.findById(id);

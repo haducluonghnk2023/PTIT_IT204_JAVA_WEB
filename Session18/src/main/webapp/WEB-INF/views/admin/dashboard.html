@@ -1,23 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{adminLayout}">
+      layout:decorate="~{layout/adminLayout}" lang="vi">
+
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard</title>
-    <th:block layout:fragment="header-scripts">
-    </th:block>
+    <title layout:fragment="title">Trang chủ Admin</title>
 </head>
+
 <body>
-<div layout:fragment="content"> <h1>Tổng kết Dashboard</h1>
+<div layout:fragment="content">
+    <h1>Thống kê</h1>
     <p>Tổng số người dùng: <span th:text="${userCount}">0</span></p>
     <p>Tổng số sản phẩm: <span th:text="${productCount}">0</span></p>
     <p>Tổng số đơn hàng: <span th:text="${orderCount}">0</span></p>
-    <p>Doanh thu tháng: <span th:text="${monthlyRevenue}">0</span></p>
-    <p>Doanh thu năm: <span th:text="${yearlyRevenue}">0</span></p>
 </div>
-<a href="/admin">Quay lại</a>
-<th:block layout:fragment="footer-scripts">
-</th:block>
 </body>
 </html>

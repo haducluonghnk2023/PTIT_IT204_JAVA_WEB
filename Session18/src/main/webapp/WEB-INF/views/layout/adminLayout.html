@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-
       lang="vi">
 <head>
     <meta charset="UTF-8">
     <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">Trang Admin</title>
+
+    <!-- Fragment chèn thêm script trong trang con -->
     <th:block layout:fragment="header-scripts"></th:block>
 </head>
 <body>
@@ -18,13 +19,13 @@
         <a th:href="@{/admin/orders}">Quản lý đơn hàng</a>
     </div>
 
+    <!-- Khu vực nội dung động của từng trang con -->
     <div class="main-content" layout:fragment="content">
-        <h1>Thống kê</h1>
-        <p>Tổng số người dùng: <span th:text="${userCount}">0</span></p>
-        <p>Tổng số sản phẩm: <span th:text="${productCount}">0</span></p>
-        <p>Tổng số đơn hàng: <span th:text="${orderCount}">0</span></p>
+        <p>Đây là nội dung mặc định.</p>
     </div>
 </div>
+
+<!-- Fragment chèn thêm JS ở dưới -->
 <th:block layout:fragment="footer-scripts"></th:block>
 </body>
 </html>
