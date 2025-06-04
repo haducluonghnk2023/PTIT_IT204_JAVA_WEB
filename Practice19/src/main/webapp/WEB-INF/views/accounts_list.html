@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<a th:href="@{/accounts/add}">
+    <button type="button">Thêm tài khoản</button>
+</a>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Account ID</th>
+                <th>Account Name</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Image</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="account : ${accounts}">
+                <td th:text="${account.id}"></td>
+                <td th:text="${account.firstName + ' ' + account.lastName}"></td>
+                <td th:text="${account.phone}"></td>
+                <td th:text="${account.address}"></td>
+                <td><img th:src="@{${account.image}}" alt="Account Image" width="50" height="50"/></td>
+                <td>
+                    <a th:href="@{/accounts/edit/{id}(id=${account.id})}">Edit</a> |
+                    <a th:href="@{/accounts/delete/{id}(id=${account.id})}" onclick="return confirm('Are you sure?');">Delete</a>
+                </td>
+            </tr>
+    </table>
+</body>
+</html>
