@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thông tin rạp chiếu phim</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h2 th:text="${theater.id != null} ? 'Chỉnh sửa rạp chiếu phim' : 'Thêm rạp chiếu phim mới'" class="mb-4"></h2>
+
+    <form th:with="formAction=${theater.id != null} ? '/theaters/edit/' + ${theater.id} : '/theaters/add'"
+          th:action="@{${formAction}}"
+          th:object="${theater}" method="post">
+
+        <div class="mb-3">
+            <label for="theaterName" class="form-label">Tên rạp</label>
+            <input type="text" id="theaterName" th:field="*{theaterName}" class="form-control" required>
+            <div class="text-danger" th:if="${#fields.hasErrors('theaterName')}" th:errors="*{theaterName}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="address" class="form-label">Địa chỉ</label>
+            <input type="text" id="address" th:field="*{address}" class="form-control" required>
+            <div class="text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="numberScreenRoom" class="form-label">Số phòng chiếu</label>
+            <input type="number" id="numberScreenRoom" th:field="*{numberScreenRoom}" class="form-control" min="1" required>
+            <div class="text-danger" th:if="${#fields.hasErrors('numberScreenRoom')}" th:errors="*{numberScreenRoom}"></div>
+        </div>
+
+        <div class="form-check mb-3">
+            <input type="checkbox" id="status" th:field="*{status}" class="form-check-input">
+            <label for="status" class="form-check-label">Đang hoạt động</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Lưu</button>
+        <a th:href="@{/theaters}" class="btn btn-secondary">Quay lại</a>
+    </form>
+</div>
+</body>
+</html>

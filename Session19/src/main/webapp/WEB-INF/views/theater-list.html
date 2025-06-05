@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách rạp chiếu phim</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Danh sách rạp chiếu phim</h2>
+
+    <!-- Nút thêm mới -->
+    <div class="mb-3 text-end">
+        <a class="btn btn-primary" th:href="@{/theaters/add}">+ Thêm rạp mới</a>
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-light">
+        <tr>
+            <th>Tên rạp</th>
+            <th>Địa chỉ</th>
+            <th>Số phòng chiếu</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="theater : ${theaters}">
+            <td th:text="${theater.theaterName}">Galaxy Cinema</td>
+            <td th:text="${theater.address}">123 Nguyễn Trãi, Q1, TP.HCM</td>
+            <td th:text="${theater.numberScreenRoom}">5</td>
+            <td>
+                <span th:text="${theater.status} ? 'Đang hoạt động' : 'Ngừng hoạt động'"
+                      th:classappend="${theater.status} ? 'text-success' : 'text-danger'">
+                    Đang hoạt động
+                </span>
+            </td>
+            <td>
+                <a class="btn btn-sm btn-warning me-1" th:href="@{/theaters/edit/{id}(id=${theater.id})}">Sửa</a>
+                <a class="btn btn-sm btn-danger" th:href="@{/theaters/delete/{id}(id=${theater.id})}"
+                   onclick="return confirm('Bạn có chắc chắn muốn xóa rạp này không?');">Xóa</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- PHÂN TRANG -->
+    <nav th:if="${totalPages > 1}">
+        <ul class="pagination justify-content-center">
+
+            <!-- Các số trang -->
+            <li class="page-item"
+                th:each="pageNum : ${#numbers.sequence(1, totalPages)}"
+                th:classappend="${pageNum == currentPage} ? 'active'">
+                <a class="page-link" th:href="@{'/theaters?page=' + ${pageNum}}" th:text="${pageNum}">1</a>
+            </li>
+
+        </ul>
+    </nav>
+</div>
+</body>
+</html>
