@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách khóa học</title>
+    <style>
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin: 20px auto;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #888;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        h2 {
+            text-align: center;
+        }
+        .actions a, .actions form {
+            display: inline-block;
+            margin-right: 5px;
+        }
+        .btn {
+            padding: 6px 12px;
+            text-decoration: none;
+            border: none;
+            background-color: #4285f4;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn-danger {
+            background-color: #e53935;
+        }
+        .btn-edit {
+            background-color: #f9a825;
+        }
+        .add-button {
+            width: 80%;
+            margin: 20px auto;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Danh sách Khóa học</h2>
+<div th:if="${error}" style="color: red; text-align: center; margin-bottom: 10px;">
+    <p th:text="${error}"></p>
+</div>
+
+<div th:if="${success}" style="color: green; text-align: center; margin-bottom: 10px;">
+    <p th:text="${success}"></p>
+</div>
+
+<div class="add-button">
+    <a th:href="@{/courses/add}" class="btn">Thêm khóa học</a>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Tên khóa học</th>
+        <th>Mô tả</th>
+        <th>Hành động</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="course : ${courses}">
+        <td th:text="${course.id}"></td>
+        <td th:text="${course.name}"></td>
+        <td th:text="${course.description}"></td>
+        <td class="actions">
+            <a th:href="@{'/courses/edit/' + ${course.id}}" class="btn btn-edit">Sửa</a>
+
+            <form th:action="@{'/courses/delete/' + ${course.id}}" method="get"
+                  onsubmit="return confirm('Bạn có chắc muốn xóa khóa học này?');">
+                <button type="submit" class="btn btn-danger">Xóa</button>
+            </form>
+        </td>
+    </tr>
+
+    </tbody>
+</table>
+
+</body>
+</html>

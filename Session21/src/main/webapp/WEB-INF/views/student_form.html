@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${student.id} != null ? 'Cập nhật sinh viên' : 'Thêm sinh viên'">Form Sinh Viên</title>
+</head>
+<body>
+<h1 th:text="${student.id} != null ? 'Cập nhật thông tin sinh viên' : 'Thêm sinh viên mới'"></h1>
+
+<form th:action="@{/students/save}" th:object="${student}" method="post" enctype="multipart/form-data">
+    <input type="hidden" th:field="*{id}"/>
+
+    <div>
+        <label>Họ tên:</label>
+        <input type="text" th:field="*{name}" />
+        <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+    </div>
+
+    <div>
+        <label>Email:</label>
+        <input type="email" th:field="*{email}" />
+        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+    </div>
+
+    <div>
+        <label>Điện thoại:</label>
+        <input type="text" th:field="*{phone}" />
+        <div th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+    </div>
+
+    <div>
+        <label>Giới tính:</label>
+        <input type="radio" th:field="*{sex}" value="true"/> Nam
+        <input type="radio" th:field="*{sex}" value="false"/> Nữ
+    </div>
+
+    <div>
+        <label>Ngày sinh:</label>
+        <input type="date" th:field="*{bod}" required/>
+    </div>
+
+    <div>
+        <label>Trạng thái:</label>
+        <input type="checkbox" th:field="*{status}"/> Hoạt động
+    </div>
+
+    <div>
+        <label>Ảnh đại diện:</label>
+        <input type="file" th:field="*{imageFile}" accept="image/*"/>
+        <div th:if="${student.avatar != null}">
+            <p>Ảnh hiện tại:</p>
+            <img th:src="@{'/uploads/' + ${student.avatar}}" alt="avatar" width="80" height="80"/>
+        </div>
+    </div>
+
+    <div>
+        <label>Chọn khóa học:</label><br/>
+        <div th:each="course : ${courses}">
+            <input type="checkbox"
+                   th:value="${course.id}"
+                   th:field="*{courseIds}"/>
+            <span th:text="${course.name}"></span><br/>
+        </div>
+    </div>
+
+    <div>
+        <button type="submit">Lưu</button>
+        <a href="/students">Hủy</a>
+    </div>
+</form>
+</body>
+</html>

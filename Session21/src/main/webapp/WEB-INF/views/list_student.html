@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách sinh viên</title>
+    <style>
+        .alert-success {
+            color: green;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .alert-error {
+            color: red;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Danh sách sinh viên</h1>
+
+<!-- Thông báo thành công -->
+<div th:if="${success}" class="alert-success" th:text="${success}"></div>
+
+<!-- Thông báo lỗi -->
+<div th:if="${error}" class="alert-error" th:text="${error}"></div>
+
+<a href="/students/add">Thêm sinh viên</a>
+
+<table border="1" cellpadding="10" cellspacing="0">
+    <thead>
+    <tr>
+        <th>STT</th>
+        <th>Hình ảnh</th>
+        <th>Họ tên</th>
+        <th>Email</th>
+        <th>Điện thoại</th>
+        <th>Giới tính</th>
+        <th>Ngày sinh</th>
+        <th>Trạng thái</th>
+        <th>Hành động</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="student, iterStat : ${students}">
+        <td th:text="${iterStat.index + 1}">1</td>
+        <td>
+            <img th:src="${student.avatar}" alt="avatar" width="60" height="60">
+        </td>
+        <td th:text="${student.name}"></td>
+        <td th:text="${student.email}"></td>
+        <td th:text="${student.phone}"></td>
+        <td th:text="${student.sex ? 'Nam' : 'Nữ'}"></td>
+        <td th:text="${#dates.format(student.bod, 'dd/MM/yyyy')}"></td>
+        <td th:text="${student.status ? 'Hoạt động' : 'Không hoạt động'}"></td>
+        <td>
+            <a th:href="@{'/students/edit/' + ${student.id}}">Sửa</a> |
+            <a th:href="@{'/students/delete/' + ${student.id}}"
+               onclick="return confirm('Bạn có chắc muốn xóa sinh viên này?')">Xóa</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

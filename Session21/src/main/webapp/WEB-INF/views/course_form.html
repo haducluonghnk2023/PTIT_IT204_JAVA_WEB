@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Thêm / Chỉnh sửa Khóa học</title>
+    <style>
+        .form-container {
+            width: 400px;
+            margin: 40px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input, textarea, button {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        button {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2 th:text="${course.id != null and course.id != 0} ? 'Chỉnh sửa Khóa học' : 'Thêm Khóa học'"></h2>
+
+    <form th:action="@{/courses/save}" th:object="${course}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <label for="name">Tên khóa học:</label>
+        <input type="text" id="name" th:field="*{name}" />
+        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color:red"></p>
+
+        <label for="description">Mô tả:</label>
+        <textarea id="description" th:field="*{description}" rows="4"></textarea>
+        <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color:red"></p>
+
+        <button type="submit" th:text="${course.id != null and course.id != 0} ? 'Cập nhật' : 'Thêm mới'"></button>
+    </form>
+
+</div>
+
+</body>
+</html>
