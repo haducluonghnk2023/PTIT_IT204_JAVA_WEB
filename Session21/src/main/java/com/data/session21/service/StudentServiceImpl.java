@@ -11,8 +11,13 @@ public class StudentServiceImpl implements  StudentService {
     @Autowired
     private StudentRepository studentRepository;
     @Override
-    public List<Student> findAll() {
-        return studentRepository.findAll();
+    public List<Student> findAll(int page, int size) {
+        return studentRepository.findAll(page, size);
+    }
+
+    @Override
+    public List<Student> findAlls() {
+        return studentRepository.findAlls();
     }
 
     @Override
@@ -28,5 +33,13 @@ public class StudentServiceImpl implements  StudentService {
     @Override
     public void deleteById(int id) {
         studentRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Student> findByName(String name) {
+        if (name == null || name.isEmpty()) {
+            return studentRepository.findAll(1, 10);
+        }
+        return studentRepository.findByName(name);
     }
 }

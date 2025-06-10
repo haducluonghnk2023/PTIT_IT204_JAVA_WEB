@@ -13,7 +13,6 @@ import java.util.List;
 public class StudentDto {
     private Integer id;
     @NotBlank(message = "Tên không được để trống")
-    @Size(min = 2, max = 100, message = "Tên phải có độ dài từ 2 đến 100 ký tự")
     private String name;
 
     @NotBlank(message = "Email không được để trống")
@@ -21,7 +20,6 @@ public class StudentDto {
     private String email;
 
     @NotBlank(message = "Số điện thoại không được để trống")
-    @Pattern(regexp = "\\d{10,11}", message = "Số điện thoại phải có 10 hoặc 11 chữ số")
     private String phone;
 
     @NotNull(message = "Vui lòng chọn giới tính")

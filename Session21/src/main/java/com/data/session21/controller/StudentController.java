@@ -19,6 +19,7 @@ import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/students")
@@ -33,10 +34,34 @@ public class StudentController {
     private Cloudinary cloudinary;
 
     @GetMapping
-    public String listStudents(Model model) {
-        model.addAttribute("students", studentService.findAll());
+    public String listStudents(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(name = "keyword", required = false) String keyword,
+            Model model) {
+
+        List<Student> students;
+        long totalStudents;
+
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            students = studentService.findByName(keyword);
+            totalStudents = students.size();
+        } else {
+            students = studentService.findAll(page, size);
+            totalStudents = studentService.findByName("").size(); // hoặc studentService.findAll(1, Integer.MAX_VALUE).size()
+        }
+
+        int totalPages = (int) Math.ceil((double) totalStudents / size);
+
+        model.addAttribute("students", students);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("pageSize", size);
+        model.addAttribute("keyword", keyword);
+
         return "list_student";
     }
+
 
     @GetMapping("/add")
     public String addStudentForm(Model model) {
@@ -54,31 +79,30 @@ public class StudentController {
             return "student_form";
         }
 
-        MultipartFile file = studentDto.getImageFile();
-        String uploadedImageUrl = null;
-
         try {
-            if (studentDto.getId() == null || (file != null && !file.isEmpty())) {
+            MultipartFile file = studentDto.getImageFile();
+            String uploadedImageUrl = null;
+
+            boolean isNewStudent = (studentDto.getId() == null);
+            Student student = isNewStudent ? new Student() : studentService.findById(studentDto.getId());
+
+            if (student == null) {
+                model.addAttribute("error", "Không tìm thấy sinh viên để cập nhật.");
+                return "redirect:/students";
+            }
+
+            if (isNewStudent || (file != null && !file.isEmpty())) {
                 if (file == null || file.isEmpty()) {
                     model.addAttribute("error", "Vui lòng chọn ảnh.");
                     model.addAttribute("courses", courseService.findAll());
                     return "student_form";
                 }
-
                 Map<?, ?> uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
                 uploadedImageUrl = (String) uploadResult.get("secure_url");
+                student.setAvatar(uploadedImageUrl);
             }
 
-            Student student;
-            if (studentDto.getId() != null) {
-                student = studentService.findById(studentDto.getId());
-                if (student == null) {
-                    student = new Student();
-                }
-            } else {
-                student = new Student();
-            }
-
+            // Gán dữ liệu từ DTO sang Entity
             student.setName(studentDto.getName());
             student.setEmail(studentDto.getEmail());
             student.setPhone(studentDto.getPhone());
@@ -86,23 +110,19 @@ public class StudentController {
             student.setBod(studentDto.getBod());
             student.setStatus(studentDto.getStatus());
 
-            if (uploadedImageUrl != null) {
-                student.setAvatar(uploadedImageUrl);
-            }
-
-            // Lấy danh sách Course từ courseIds
+            // Gán course
             if (studentDto.getCourseIds() != null && !studentDto.getCourseIds().isEmpty()) {
                 List<Course> selectedCourses = courseService.findByIds(studentDto.getCourseIds());
                 student.setCourses(new HashSet<>(selectedCourses));
             } else {
-                student.setCourses(null);
+                student.setCourses(new HashSet<>());
             }
 
             studentService.save(student);
             return "redirect:/students";
 
         } catch (Exception e) {
-            model.addAttribute("error", "Lỗi khi upload: " + e.getMessage());
+            model.addAttribute("error", "Lỗi khi lưu sinh viên: " + e.getMessage());
             model.addAttribute("courses", courseService.findAll());
             return "student_form";
         }
@@ -126,6 +146,14 @@ public class StudentController {
         studentDto.setBod(student.getBod());
         studentDto.setStatus(student.getStatus());
         studentDto.setAvatar(student.getAvatar());
+        if (student.getCourses() != null) {
+            List<Integer> selectedCourseIds = student.getCourses()
+                    .stream()
+                    .map(Course::getId)
+                    .collect(Collectors.toList());
+            studentDto.setCourseIds(selectedCourseIds);
+        }
+
 
         model.addAttribute("student", studentDto);
         model.addAttribute("courses", courseService.findAll());
@@ -142,7 +170,6 @@ public class StudentController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Đã xảy ra lỗi khi xóa sinh viên.");
         }
-
         return "redirect:/students";
     }
 

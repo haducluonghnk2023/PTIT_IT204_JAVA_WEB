@@ -8,5 +8,6 @@
 <h4>Trang chu</h4>
 <a href="courses">Danh sach khoa hoc</a>
 <a href="students">Danh sach sinh vien</a>
+<a href="student-course">Danh sach sinh vien da dang ky khoa hoc</a>
 </body>
 </html>

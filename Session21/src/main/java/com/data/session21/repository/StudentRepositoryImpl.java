@@ -12,9 +12,22 @@ public class StudentRepositoryImpl implements StudentRepository {
     @Autowired
     private SessionFactory sessionFactory;
     @Override
-    public List<Student> findAll() {
+    public List<Student> findAll(int page, int size) {
         Session session = sessionFactory.openSession();
-        List<Student> students = session.createQuery("from Student", Student.class).getResultList();
+        List<Student> students = session.createQuery("FROM Student", Student.class)
+                .setFirstResult((page - 1) * size)
+                .setMaxResults(size)
+                .getResultList();
+        session.close();
+        return students;
+    }
+
+    @Override
+    public List<Student> findAlls() {
+        Session session = sessionFactory.openSession();
+        List<Student> students = session
+                .createQuery("SELECT DISTINCT s FROM Student s LEFT JOIN FETCH s.courses", Student.class)
+                .getResultList();
         session.close();
         return students;
     }
@@ -22,7 +35,10 @@ public class StudentRepositoryImpl implements StudentRepository {
     @Override
     public Student findById(int id) {
         Session session = sessionFactory.openSession();
-        Student student = session.get(Student.class, id);
+        Student student = session.createQuery(
+                        "SELECT s FROM Student s LEFT JOIN FETCH s.courses WHERE s.id = :id", Student.class)
+                .setParameter("id", id)
+                .uniqueResult();
         session.close();
         return student;
     }
@@ -56,6 +72,16 @@ public class StudentRepositoryImpl implements StudentRepository {
 
         session.getTransaction().commit();
         session.close();
+    }
+
+    @Override
+    public List<Student> findByName(String name) {
+        Session session = sessionFactory.openSession();
+        List<Student> students = session.createQuery("FROM Student WHERE name LIKE :name", Student.class)
+                .setParameter("name", "%" + name + "%")
+                .getResultList();
+        session.close();
+        return students;
     }
 
 }
